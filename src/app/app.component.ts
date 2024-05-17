@@ -6,13 +6,15 @@ import { RouterOutlet } from '@angular/router'
 	standalone: true,
 	imports: [RouterOutlet],
 	template: `
-		<h1>Welcome to {{ title }}!</h1>
-
-		<router-outlet />
+		<div class="content" role="main">
+			<router-outlet />
+		</div>
 	`,
 	styles: `
 		:host {
 			isolation: isolate;
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+				'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 		}
 	`,
 })
