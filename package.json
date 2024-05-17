@@ -1,0 +1,31 @@
+{
+  "name": "ngt-webxr-art",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^18.0.0-next.0",
+    "@angular/common": "^18.0.0-next.0",
+    "@angular/compiler": "^18.0.0-next.0",
+    "@angular/core": "^18.0.0-next.0",
+    "@angular/forms": "^18.0.0-next.0",
+    "@angular/platform-browser": "^18.0.0-next.0",
+    "@angular/platform-browser-dynamic": "^18.0.0-next.0",
+    "@angular/router": "^18.0.0-next.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.0.0-rc.2",
+    "@angular/cli": "^18.0.0-rc.2",
+    "@angular/compiler-cli": "^18.0.0-next.0",
+    "typescript": "~5.4.2"
+  },
+  "packageManager": "yarn@1.22.19+sha512.ff4579ab459bb25aa7c0ff75b62acebe576f6084b36aa842971cf250a5d8c6cd3bc9420b22ce63c7f93a0857bc6ef29291db39c3e7a23aab5adfd5a4dd6c5d71"
+}
