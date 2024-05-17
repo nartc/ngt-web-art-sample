@@ -10,7 +10,11 @@ import { RouterOutlet } from '@angular/router'
 
 		<router-outlet />
 	`,
-	styles: [],
+	styles: `
+		:host {
+			isolation: isolate;
+		}
+	`,
 })
 export class AppComponent {
 	title = 'ngt-webxr-art'
