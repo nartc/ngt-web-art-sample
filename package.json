@@ -18,9 +18,11 @@
 		"@angular/platform-browser-dynamic": "^18.0.0-next.0",
 		"@angular/router": "^18.0.0-next.0",
 		"angular-three": "^2.0.0-beta.223",
+		"angular-three-soba": "^2.0.0-beta.41",
 		"ngxtension": "^1.0.0",
 		"rxjs": "~7.8.0",
 		"three": "^0.159.0",
+		"three-stdlib": "^2.30.0",
 		"tslib": "^2.3.0",
 		"zone.js": "~0.14.3"
 	},
