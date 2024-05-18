@@ -6,7 +6,7 @@ import { injectNgtsGLTFLoader } from 'angular-three-soba/loaders'
 	selector: 'app-walls',
 	standalone: true,
 	template: `
-		<ngt-primitive *args="[model()]" [position]="[0, 0, 0]" [scale]="3" />
+		<ngt-primitive *args="[model()]" />
 	`,
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,6 +17,12 @@ export class Walls {
 	protected model = computed(() => {
 		const gltf = this.gltf()
 		if (!gltf) return null
-		return gltf.scene
+
+		const scene = gltf.scene
+
+		scene.position.set(0, 0, 0)
+		scene.scale.setScalar(3)
+
+		return scene
 	})
 }

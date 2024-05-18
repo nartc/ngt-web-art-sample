@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
-import { extend, injectNgtRef, NgtArgs, type NgtInjectedRef } from 'angular-three'
+import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, effect, input, output } from '@angular/core'
+import { extend, getLocalState, NgtArgs, type NgtInjectedRef } from 'angular-three'
 import { injectNgtsTextureLoader } from 'angular-three-soba/loaders'
 import {
 	BoxGeometry,
@@ -9,7 +9,6 @@ import {
 	MeshPhongMaterial,
 	SpotLight,
 	SRGBColorSpace,
-	Texture,
 	UVMapping,
 } from 'three'
 import type { Artwork } from '../services/artwork.store'
@@ -28,7 +27,7 @@ extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 			[userData]="{ description: artwork().description }"
 			(afterAttach)="frameAttached.emit($any(frameGroup))"
 		>
-			<ngt-mesh [ref]="frameMeshRef" [name]="artwork().title + ' frame mesh'" [geometry]="geometryRef().nativeElement">
+			<ngt-mesh [name]="artwork().title + ' frame mesh'" [geometry]="geometryRef().nativeElement">
 				<ngt-mesh-phong-material color="rgb(165, 187, 206)" [needsUpdate]="true" />
 			</ngt-mesh>
 
@@ -58,17 +57,17 @@ export class Frame {
 	artwork = input.required<Artwork>()
 	frameAttached = output<Group>()
 
-	protected frameMeshRef = injectNgtRef<Mesh>()
-
 	constructor() {
-		queueMicrotask(() => {
-			this.frameMeshRef.nativeElement.geometry.rotateX(Math.PI / 2)
+		effect(() => {
+			const geometryParent = getLocalState(this.geometryRef().nativeElement)?.parent()
+			if (geometryParent) {
+				this.geometryRef().nativeElement.rotateX(Math.PI / 2)
+			}
 		})
 	}
 
 	protected artworkTexture = injectNgtsTextureLoader(() => this.artwork().url, {
-		onLoad: (t) => {
-			const texture = t as Texture
+		onLoad: ([texture]) => {
 			texture.colorSpace = SRGBColorSpace
 			texture.mapping = UVMapping
 		},

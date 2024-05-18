@@ -11,7 +11,7 @@ extend({ Group, CylinderGeometry })
 	standalone: true,
 	template: `
 		<ngt-cylinder-geometry [ref]="geometryRef" *args="[1, 0.85, 0.1, 64, 5]" attach="none" />
-		<ngt-group name="Frames Group" [position]="[0, 1.6, 0]" (afterUpdate)="onAfterUpdate($any($event))">
+		<ngt-group name="Frames Group" [position]="[0, 1.6, 0]" (afterAttach)="onAfterAttach($any($event).node)">
 			@for (artwork of artworks(); track artwork.id) {
 				<app-frame [artwork]="artwork" [geometryRef]="geometryRef" (frameAttached)="onFrameAttached($event, $index)" />
 			}
@@ -28,20 +28,18 @@ export class Frames {
 	protected geometryRef = injectNgtRef<CylinderGeometry>()
 
 	protected onFrameAttached(frame: Group, index: number) {
-		queueMicrotask(() => {
-			const alpha = index * this.angle()
-			const x = Math.sin(alpha) * 7 // 0 - 1
-			const z = -Math.cos(alpha) * 7 // 0 - 0
-			console.log(index, x, z, frame)
-			frame.position.set(x, 0, z)
-			frame.rotation.y = alpha
-			frame.userData['originalPosition'] = frame.position.clone()
-			checkUpdate(frame)
-		})
+		const alpha = index * this.angle()
+		const x = Math.sin(alpha) * 7 // 0 - 1
+		const z = -Math.cos(alpha) * 7 // 0 - 0
+		frame.position.set(x, 0, z)
+		frame.rotation.y = alpha
+		frame.userData['originalPosition'] = frame.position.clone()
+		checkUpdate(frame)
 	}
 
-	protected onAfterUpdate(frames: Group) {
-		setTimeout(() => {
+	protected onAfterAttach(frames: Group) {
+		// NOTE: we want to run this after all frames are attached
+		queueMicrotask(() => {
 			const f = frames.children[0]
 			const x = (f.position.x / 7) * 4
 			const z = (f.position.z / 7) * 4
