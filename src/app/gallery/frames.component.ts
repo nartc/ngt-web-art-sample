@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA, i
 import { checkUpdate, extend, injectNgtRef, NgtArgs } from 'angular-three'
 import { animate, easeInOut } from 'popmotion'
 import { CylinderGeometry, Group, MathUtils, Object3D, Vector3 } from 'three'
-import type { Artwork } from '../services/artwork.store'
-import { SpeechClient } from '../services/speech.client'
+import type { Artwork } from '../artworks'
+import { SpeechClient } from '../speech.client'
 import { Frame } from './frame.component'
 
 extend({ Group, CylinderGeometry })

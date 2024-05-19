@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
-import { ArtworkStore } from '../services/artwork.store'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { ARTWORKS } from '../artworks'
 import { Controls } from './controls.component'
 import { Floor } from './floor.component'
 import { Frames } from './frames.component'
@@ -11,7 +11,7 @@ import { Walls } from './walls.component'
 	template: `
 		<app-gallery-lights />
 		<app-controls />
-		<app-frames [artworks]="artworkStore.artworks()" />
+		<app-frames [artworks]="artworks" />
 
 		<app-floor />
 		<app-walls />
@@ -21,5 +21,5 @@ import { Walls } from './walls.component'
 	imports: [Controls, Frames, Floor, Walls, GalleryLights],
 })
 export class GalleryScene {
-	protected artworkStore = inject(ArtworkStore)
+	protected artworks = ARTWORKS
 }

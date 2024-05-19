@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, outp
 import { extend, injectBeforeRender, NgtArgs, type NgtThreeEvent } from 'angular-three'
 import { Color } from 'three'
 import { Block, Text, update } from 'three-mesh-ui'
-import type { Artwork } from '../services/artwork.store'
+import type { Artwork } from '../artworks'
 
 extend({ MeshBlock: Block, MeshText: Text })
 

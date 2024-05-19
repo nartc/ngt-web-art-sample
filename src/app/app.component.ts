@@ -18,6 +18,4 @@ import { RouterOutlet } from '@angular/router'
 		}
 	`,
 })
-export class AppComponent {
-	title = 'ngt-webxr-art'
-}
+export class AppComponent {}

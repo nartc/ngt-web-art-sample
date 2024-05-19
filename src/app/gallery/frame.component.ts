@@ -11,7 +11,7 @@ import {
 	SRGBColorSpace,
 	UVMapping,
 } from 'three'
-import type { Artwork } from '../services/artwork.store'
+import type { Artwork } from '../artworks'
 import { FrameButtons } from './frame-buttons.component'
 
 extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })

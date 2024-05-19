@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { extend, injectNgtRef, NgtArgs } from 'angular-three'
 import { injectNgtsGLTFLoader } from 'angular-three-soba/loaders'
-import { Mesh, MeshBasicMaterial, PointLight, SphereGeometry, type Object3D } from 'three'
+import { Mesh, PointLight, SphereGeometry, type Object3D } from 'three'
 import type { OrbitControls } from 'three-stdlib'
 import { Controls } from './controls.component'
 import { Lights } from './lights.component'
 
-extend({ Mesh, SphereGeometry, MeshBasicMaterial, PointLight })
+extend({ Mesh, SphereGeometry, PointLight })
 
 @Component({
 	standalone: true,
@@ -18,7 +18,6 @@ extend({ Mesh, SphereGeometry, MeshBasicMaterial, PointLight })
 
 		<ngt-mesh [position]="[0, 0, -90]" (beforeRender)="onParticleLightBeforeRender($any($event).object)">
 			<ngt-sphere-geometry *args="[0.05, 8, 8]" />
-			<ngt-mesh-basic-material />
 			<ngt-point-light [intensity]="30" [rotation]="[-Math.PI / 2, 0, 0]" />
 		</ngt-mesh>
 	`,
