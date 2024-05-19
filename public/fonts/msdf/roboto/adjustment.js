@@ -24,4 +24,4 @@ export default {
 	j: { yoffset: 4.5 },
 	b: { yoffset: 2 },
 	d: { yoffset: 2 },
-};
+}

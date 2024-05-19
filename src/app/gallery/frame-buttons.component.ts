@@ -26,7 +26,7 @@ extend({ MeshBlock: Block, MeshText: Text })
 				}
 			]"
 			[position]="[0, -0.7, -0.2]"
-			[rotation]="[-0.55, Math.PI, 0]"
+			(afterAttach)="onAfterAttach($any($event).node)"
 		>
 			@for (button of buttons; track button.name) {
 				<ngt-mesh-block
@@ -102,6 +102,11 @@ export class FrameButtons {
 		injectBeforeRender(() => {
 			update()
 		})
+	}
+
+	protected onAfterAttach(panel: Block) {
+		panel.rotateY(Math.PI)
+		panel.rotateX(-0.55)
 	}
 
 	protected onAfterButtonAttach(button: Block) {

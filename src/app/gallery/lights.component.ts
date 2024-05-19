@@ -18,15 +18,17 @@ export class Lights {
 
 	private store = injectNgtStore()
 	private camera = this.store.select('camera')
+	private scene = this.store.select('scene')
 
 	constructor() {
 		effect(() => {
-			const camera = this.camera()
-			if (!camera) return
+			const [camera, scene] = [this.camera(), this.scene()]
+			if (!camera || !scene) return
 
 			const spotLight = new SpotLight(0xffffff, 30, 30, Math.PI / 4, 0.5)
 			spotLight.position.set(0, -2, 0.64)
 			camera.add(spotLight)
+			scene.add(camera)
 		})
 	}
 }

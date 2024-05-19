@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core'
 import { checkUpdate, extend, injectNgtRef, NgtArgs } from 'angular-three'
-import { CylinderGeometry, Group, Object3D, Vector3 } from 'three'
+import { animate, easeInOut } from 'popmotion'
+import { CylinderGeometry, Group, MathUtils, Object3D, Vector3 } from 'three'
 import type { Artwork } from '../services/artwork.store'
 import { Frame } from './frame.component'
 
@@ -40,14 +41,27 @@ export class Frames {
 	protected framesRef = injectNgtRef<Group>()
 
 	protected onNext(currentId: number) {
-		console.log('showing next frame')
+		const currentFrame = this.framesRef.nativeElement.children[currentId]
+		this.resetFramePosition(currentFrame)
+
+		// Rotate to Next frame
+		const i = currentId < 5 - 1 ? currentId + 1 : 0
+		this.rotateFrames(72)
+		this.focusFrame(this.framesRef.nativeElement.children[i])
 	}
 
 	protected onPrevious(currentId: number) {
-		console.log('showing previous frame')
+		const currentFrame = this.framesRef.nativeElement.children[currentId]
+		this.resetFramePosition(currentFrame)
+
+		// Rotate to Previous
+		const i = currentId === 0 ? 5 - 1 : currentId - 1
+		this.rotateFrames(-72)
+		this.focusFrame(this.framesRef.nativeElement.children[i])
 	}
 
 	protected onFrameAttached(frame: Group, index: number) {
+		frame.rotateY(Math.PI)
 		const alpha = index * this.angle()
 		const x = Math.sin(alpha) * 7 // 0 - 1
 		const z = -Math.cos(alpha) * 7 // 0 - 0
@@ -73,8 +87,36 @@ export class Frames {
 	}
 
 	protected moveFrame(frame: Object3D, position: Vector3) {
-		// const to = new Vector3(position.x, position.y, position.z)
-		frame.position.copy(position)
-		checkUpdate(frame)
+		animate({
+			from: frame.position,
+			to: position,
+			duration: 2500,
+			ease: easeInOut,
+			onUpdate: (latest) => {
+				frame.position.x = latest.x
+				frame.position.y = latest.y
+				frame.position.z = latest.z
+			},
+			onComplete: () => {
+				checkUpdate(frame)
+			},
+		})
+	}
+
+	protected resetFramePosition(frame: Object3D) {
+		const position = frame.userData['originalPosition']
+		this.moveFrame(frame, position)
+	}
+
+	protected rotateFrames(angle: number = 72) {
+		// angle between frames and the current group rotation
+		const y = MathUtils.degToRad(angle) + this.framesRef.nativeElement.rotation.y
+		animate({
+			from: this.framesRef.nativeElement.rotation.y,
+			to: y,
+			duration: 1000,
+			ease: easeInOut,
+			onUpdate: (latest) => (this.framesRef.nativeElement.rotation.y = latest),
+		})
 	}
 }

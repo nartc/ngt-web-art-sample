@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
-import { extend, NgtArgs, type NgtInjectedRef } from 'angular-three'
+import { checkUpdate, extend, NgtArgs, type NgtInjectedRef } from 'angular-three'
 import { injectNgtsTextureLoader } from 'angular-three-soba/loaders'
 import {
 	BoxGeometry,
@@ -23,9 +23,11 @@ extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 		<ngt-group
 			#frameGroup
 			[name]="artwork().title + ' frame group'"
-			[rotation]="[0, Math.PI, 0]"
 			[scale]="1.3"
-			[userData]="{ description: artwork().description }"
+			[userData]="{
+				description: artwork().description,
+				originalPosition: frameGroup['userData']?.['originalPosition']
+			}"
 			(afterAttach)="frameAttached.emit($any(frameGroup))"
 		>
 			<ngt-mesh
@@ -78,6 +80,7 @@ export class Frame {
 		onLoad: ([texture]) => {
 			texture.colorSpace = SRGBColorSpace
 			texture.mapping = UVMapping
+			checkUpdate(texture)
 		},
 	})
 

@@ -19,7 +19,6 @@ extend({ Mesh, SphereGeometry, MeshBasicMaterial, PointLight })
 		<ngt-mesh [position]="[0, 0, -90]" (beforeRender)="onParticleLightBeforeRender($any($event).object)">
 			<ngt-sphere-geometry *args="[0.05, 8, 8]" />
 			<ngt-mesh-basic-material />
-
 			<ngt-point-light [intensity]="30" [rotation]="[-Math.PI / 2, 0, 0]" />
 		</ngt-mesh>
 	`,

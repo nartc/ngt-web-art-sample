@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
-import { MuseumCanvas } from './canvas.component'
 import { GalleryScene } from './gallery-scene.component'
 import { LoadingScene } from './loading-scene.component'
+import { MuseumCanvas } from './museum-canvas.component'
 
 @Component({
 	standalone: true,

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, type Type } from '@angular/core'
-import { NgtCanvas } from 'angular-three'
+import { NgtCanvas, type NgtGLOptions } from 'angular-three'
 import { NgtsLoader } from 'angular-three-soba/loaders'
 import * as THREE from 'three'
 
@@ -34,7 +34,7 @@ export class MuseumCanvas {
 		far: 500,
 	}
 
-	protected glOptions = {
+	protected glOptions: NgtGLOptions = {
 		toneMappingExposure: 1.5,
 		// NOTE: Uncomment the following line to enable WebXR
 		// xr: {

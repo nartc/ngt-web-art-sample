@@ -44,36 +44,37 @@ export class Floor {
 		scene.traverse((obj) => {
 			if ((obj as Mesh).isMesh) {
 				if (obj.name === 'Floor') {
-					material = new MeshStandardMaterial({
-						roughness: 0.8,
-						color: 0xffffff,
-						metalness: 0.2,
-						bumpScale: 0.0005,
-					})
-
 					// Diffuse
 					diffuse.wrapS = RepeatWrapping
 					diffuse.wrapT = RepeatWrapping
 					diffuse.anisotropy = 16
 					diffuse.repeat.set(10, 24)
 					diffuse.colorSpace = SRGBColorSpace
-					material.map = diffuse
+					checkUpdate(diffuse)
 
 					// bump
 					bump.wrapS = RepeatWrapping
 					bump.wrapT = RepeatWrapping
 					bump.anisotropy = 4
 					bump.repeat.set(10, 24)
-					material.bumpMap = bump
+					checkUpdate(bump)
 
 					// roughness
 					roughness.wrapS = RepeatWrapping
 					roughness.wrapT = RepeatWrapping
 					roughness.anisotropy = 4
 					roughness.repeat.set(10, 24)
-					material.roughnessMap = roughness
+					checkUpdate(roughness)
 
-					checkUpdate(material)
+					material = new MeshStandardMaterial({
+						roughness: 0.8,
+						color: 0xffffff,
+						metalness: 0.2,
+						bumpScale: 0.0005,
+						map: diffuse,
+						bumpMap: bump,
+						roughnessMap: roughness,
+					})
 				}
 
 				;(obj as Mesh).material = material
