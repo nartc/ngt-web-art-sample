@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core'
+import { injectNgtRef } from 'angular-three'
 import { NgtsOrbitControls } from 'angular-three-soba/controls'
+import { OrbitControls } from 'three-stdlib'
 
 @Component({
 	selector: 'app-controls',
 	standalone: true,
 	template: `
 		<ngts-orbit-controls
+			[controlsRef]="controlsRef()"
 			[target]="[0, 1.6, -5]"
 			[dampingFactor]="0.05"
 			[enableZoom]="true"
@@ -22,4 +25,5 @@ import { NgtsOrbitControls } from 'angular-three-soba/controls'
 })
 export class Controls {
 	protected Math = Math
+	controlsRef = input(injectNgtRef<OrbitControls>())
 }

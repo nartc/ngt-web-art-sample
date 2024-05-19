@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, effect, input, output } from '@angular/core'
-import { extend, getLocalState, NgtArgs, type NgtInjectedRef } from 'angular-three'
+import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
+import { extend, NgtArgs, type NgtInjectedRef } from 'angular-three'
 import { injectNgtsTextureLoader } from 'angular-three-soba/loaders'
 import {
 	BoxGeometry,
@@ -12,6 +12,7 @@ import {
 	UVMapping,
 } from 'three'
 import type { Artwork } from '../services/artwork.store'
+import { FrameButtons } from './frame-buttons.component'
 
 extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 
@@ -27,7 +28,12 @@ extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 			[userData]="{ description: artwork().description }"
 			(afterAttach)="frameAttached.emit($any(frameGroup))"
 		>
-			<ngt-mesh [name]="artwork().title + ' frame mesh'" [geometry]="geometryRef().nativeElement">
+			<ngt-mesh
+				#frameMesh
+				[name]="artwork().title + ' frame mesh'"
+				[geometry]="geometryRef().nativeElement"
+				(afterAttach)="onAfterAttach($any(frameMesh))"
+			>
 				<ngt-mesh-phong-material color="rgb(165, 187, 206)" [needsUpdate]="true" />
 			</ngt-mesh>
 
@@ -44,27 +50,29 @@ extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 				[target]="canvasMesh"
 				[position]="[0, 2, 0]"
 			/>
+
+			<app-frame-buttons
+				[artwork]="artwork()"
+				(next)="next.emit(artwork().id!)"
+				(previous)="previous.emit(artwork().id!)"
+				(playInfo)="playInfo.emit(artwork())"
+			/>
 		</ngt-group>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	imports: [NgtArgs],
+	imports: [NgtArgs, FrameButtons],
 })
 export class Frame {
 	protected Math = Math
 
 	geometryRef = input.required<NgtInjectedRef<CylinderGeometry>>()
 	artwork = input.required<Artwork>()
-	frameAttached = output<Group>()
 
-	constructor() {
-		effect(() => {
-			const geometryParent = getLocalState(this.geometryRef().nativeElement)?.parent()
-			if (geometryParent) {
-				this.geometryRef().nativeElement.rotateX(Math.PI / 2)
-			}
-		})
-	}
+	frameAttached = output<Group>()
+	next = output<number>()
+	previous = output<number>()
+	playInfo = output<Artwork>()
 
 	protected artworkTexture = injectNgtsTextureLoader(() => this.artwork().url, {
 		onLoad: ([texture]) => {
@@ -72,4 +80,10 @@ export class Frame {
 			texture.mapping = UVMapping
 		},
 	})
+
+	protected onAfterAttach(frameMesh: Mesh) {
+		queueMicrotask(() => {
+			frameMesh.geometry.rotateX(Math.PI / 2)
+		})
+	}
 }

@@ -1,12 +1,16 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core'
-import { NgtCanvas, type NgtCanvasInputs } from 'angular-three'
-import * as THREE from 'three'
-import { Scene } from './scene.component'
+import { ChangeDetectionStrategy, Component } from '@angular/core'
+import { MuseumCanvas } from './canvas.component'
+import { GalleryScene } from './gallery-scene.component'
+import { LoadingScene } from './loading-scene.component'
 
 @Component({
 	standalone: true,
 	template: `
-		<ngt-canvas [sceneGraph]="scene" [options]="canvasOptions()" />
+		@defer (prefetch on idle) {
+			<app-museum-canvas [scene]="galleryScene" />
+		} @placeholder (minimum 5s) {
+			<app-museum-canvas [scene]="loadingScene" />
+		}
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { class: 'gallery-page' },
@@ -16,29 +20,9 @@ import { Scene } from './scene.component'
 			height: 100dvh;
 		}
 	`,
-	imports: [NgtCanvas],
+	imports: [MuseumCanvas],
 })
 export default class GalleryPage {
-	protected scene = Scene
-
-	protected canvasOptions = signal<Partial<NgtCanvasInputs>>({
-		scene: {
-			background: new THREE.Color('black'),
-			backgroundBlurriness: 0.3,
-		},
-		camera: {
-			position: [0, 5, 0],
-			fov: 45,
-			near: 0.1,
-			far: 500,
-		},
-		shadows: true,
-		gl: {
-			toneMappingExposure: 1.5,
-			// NOTE: Uncomment the following line to enable WebXR
-			// xr: {
-			//     enabled: true
-			// }
-		},
-	})
+	galleryScene = GalleryScene
+	loadingScene = LoadingScene
 }

@@ -2465,17 +2465,17 @@ ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-angular-three-soba@^2.0.0-beta.225:
-  version "2.0.0-beta.225"
-  resolved "https://registry.yarnpkg.com/angular-three-soba/-/angular-three-soba-2.0.0-beta.225.tgz#2bf52b692fe0a2cf78218edacccad6b9d1dbd2c6"
-  integrity sha512-9fs0Y1SCi9+7gU5gklhaclYpryTIJhcAJKEYhgJT4UjTORAt67UPpU36xxg0NSeF8+TTmab6e1vj5ooxCbxkwA==
+angular-three-soba@^2.0.0-beta.226:
+  version "2.0.0-beta.226"
+  resolved "https://registry.yarnpkg.com/angular-three-soba/-/angular-three-soba-2.0.0-beta.226.tgz#ed6292ac6f0658776cb81d517f2a10dce1aeb290"
+  integrity sha512-7qBcR/oJy03rIOZ5yStGYkynKQzsyVN7Cnj0T4bThLcz20LqI8Q61Q677TX0ERTXyWpPHF8pC0/t/eTq2b5JhQ==
   dependencies:
     tslib "^2.3.0"
 
-angular-three@^2.0.0-beta.225:
-  version "2.0.0-beta.225"
-  resolved "https://registry.yarnpkg.com/angular-three/-/angular-three-2.0.0-beta.225.tgz#35bd228b95daa096de5bf9c0034c4bb1cd6757e8"
-  integrity sha512-RmKeOy86+VZnm0pD6j3+YlvQT6Tj0m3ExS6VRXJxENcnLZZdBC7rVsorW2qwFMX0DtBBDqlj0C81tTsPnvaTtg==
+angular-three@^2.0.0-beta.226:
+  version "2.0.0-beta.226"
+  resolved "https://registry.yarnpkg.com/angular-three/-/angular-three-2.0.0-beta.226.tgz#2e135a32c02ea01df823bebb2f548729ec428c4e"
+  integrity sha512-tZk7ZsAw8X9ypWEQVE9gFcFwY0lmC5D1uxnBbX+bnBFyhKwY/3sjBfTk458oUETQ89GGjku3YO4dmNwNefVUtg==
   dependencies:
     "@nx/devkit" "^19.0.0"
     "@phenomnomnominal/tsquery" "^6.0.0"
@@ -6322,6 +6322,11 @@ thingies@^1.20.0:
   version "1.21.0"
   resolved "https://registry.yarnpkg.com/thingies/-/thingies-1.21.0.tgz#e80fbe58fd6fdaaab8fad9b67bd0a5c943c445c1"
   integrity sha512-hsqsJsFMsV+aD4s3CWKk85ep/3I9XzYV/IXaSouJMYIoDlgyi11cBhsqYe9/geRfB0YIikBQg6raRaM+nIMP9g==
+
+three-mesh-ui@^6.5.4:
+  version "6.5.4"
+  resolved "https://registry.yarnpkg.com/three-mesh-ui/-/three-mesh-ui-6.5.4.tgz#68f0a5aba4dced0ed168d2574f45d93b55f4fd03"
+  integrity sha512-QA2KlHrbj7zGjKqpNXcwvini8g5gOXb44ExdupVpxCqmHln/sWNGOmN0yIa/HjnMGYJWP4M+NchTHvwUp+MWIw==
 
 three-stdlib@^2.30.0:
   version "2.30.0"

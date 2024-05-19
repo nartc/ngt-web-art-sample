@@ -3,13 +3,13 @@ import { ArtworkStore } from '../services/artwork.store'
 import { Controls } from './controls.component'
 import { Floor } from './floor.component'
 import { Frames } from './frames.component'
-import { Lights } from './lights.component'
+import { GalleryLights } from './gallery-lights.component'
 import { Walls } from './walls.component'
 
 @Component({
 	standalone: true,
 	template: `
-		<app-lights />
+		<app-gallery-lights />
 		<app-controls />
 		<app-frames [artworks]="artworkStore.artworks()" />
 
@@ -18,8 +18,8 @@ import { Walls } from './walls.component'
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { class: 'experience' },
-	imports: [Lights, Controls, Frames, Floor, Walls],
+	imports: [Controls, Frames, Floor, Walls, GalleryLights],
 })
-export class Scene {
+export class GalleryScene {
 	protected artworkStore = inject(ArtworkStore)
 }

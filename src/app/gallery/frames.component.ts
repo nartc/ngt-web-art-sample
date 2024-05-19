@@ -11,9 +11,20 @@ extend({ Group, CylinderGeometry })
 	standalone: true,
 	template: `
 		<ngt-cylinder-geometry [ref]="geometryRef" *args="[1, 0.85, 0.1, 64, 5]" attach="none" />
-		<ngt-group name="Frames Group" [position]="[0, 1.6, 0]" (afterAttach)="onAfterAttach($any($event).node)">
+		<ngt-group
+			[ref]="framesRef"
+			name="Frames Group"
+			[position]="[0, 1.6, 0]"
+			(afterAttach)="onAfterAttach($any($event).node)"
+		>
 			@for (artwork of artworks(); track artwork.id) {
-				<app-frame [artwork]="artwork" [geometryRef]="geometryRef" (frameAttached)="onFrameAttached($event, $index)" />
+				<app-frame
+					[artwork]="artwork"
+					[geometryRef]="geometryRef"
+					(frameAttached)="onFrameAttached($event, $index)"
+					(next)="onNext($event)"
+					(previous)="onPrevious($event)"
+				/>
 			}
 		</ngt-group>
 	`,
@@ -26,6 +37,15 @@ export class Frames {
 	protected angle = computed(() => (Math.PI * 2) / this.artworks().length || 5)
 
 	protected geometryRef = injectNgtRef<CylinderGeometry>()
+	protected framesRef = injectNgtRef<Group>()
+
+	protected onNext(currentId: number) {
+		console.log('showing next frame')
+	}
+
+	protected onPrevious(currentId: number) {
+		console.log('showing previous frame')
+	}
 
 	protected onFrameAttached(frame: Group, index: number) {
 		const alpha = index * this.angle()
@@ -41,11 +61,15 @@ export class Frames {
 		// NOTE: we want to run this after all frames are attached
 		queueMicrotask(() => {
 			const f = frames.children[0]
-			const x = (f.position.x / 7) * 4
-			const z = (f.position.z / 7) * 4
-			const p = new Vector3(x, f.position.y, z)
-			this.moveFrame(f, p)
+			this.focusFrame(f)
 		})
+	}
+
+	protected focusFrame(frame: Object3D) {
+		const x = (frame.position.x / 7) * 4
+		const z = (frame.position.z / 7) * 4
+		const p = new Vector3(x, frame.position.y, z)
+		this.moveFrame(frame, p)
 	}
 
 	protected moveFrame(frame: Object3D, position: Vector3) {
