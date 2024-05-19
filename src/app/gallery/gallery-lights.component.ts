@@ -9,10 +9,13 @@ extend({ PointLight })
 	selector: 'app-gallery-lights',
 	standalone: true,
 	template: `
+		<!-- addLights -->
 		<app-lights />
-		<ngt-point-light [intensity]="Math.PI" [distance]="13" [decay]="1" [position]="[0, 3.2, -10]" />
-		<ngt-point-light [intensity]="Math.PI" [distance]="13" [decay]="1" [position]="[10, 3.2, 7.6]" />
-		<ngt-point-light [intensity]="Math.PI" [distance]="13" [decay]="1" [position]="[-10, 3.2, 7.6]" />
+
+		<!-- addCornerLights -->
+		@for (position of lightPositions; track $index) {
+			<ngt-point-light [intensity]="Math.PI" [distance]="13" [decay]="1" [position]="position" />
+		}
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -20,4 +23,9 @@ extend({ PointLight })
 })
 export class GalleryLights {
 	protected Math = Math
+	protected lightPositions = [
+		[0, 3.2, -10],
+		[10, 3.2, 7.6],
+		[-10, 3.2, 7.6],
+	]
 }

@@ -84,7 +84,7 @@ export class Frame {
 		},
 	})
 
-	protected onAfterAttach(frameMesh: Mesh) {
+	onAfterAttach(frameMesh: Mesh) {
 		queueMicrotask(() => {
 			frameMesh.geometry.rotateX(Math.PI / 2)
 		})

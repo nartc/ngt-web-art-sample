@@ -9,12 +9,16 @@ import { Walls } from './walls.component'
 @Component({
 	standalone: true,
 	template: `
-		<app-gallery-lights />
+		<!-- addControls -->
 		<app-controls />
+
 		<app-frames [artworks]="artworks" />
 
+		<!-- createEnv -->
+		<app-gallery-lights />
 		<app-floor />
 		<app-walls />
+		<!-- end createEnv -->
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { class: 'experience' },

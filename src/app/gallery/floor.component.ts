@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
-import { checkUpdate, extend, NgtArgs } from 'angular-three'
+import { checkUpdate, NgtArgs } from 'angular-three'
 import { injectNgtsGLTFLoader, injectNgtsTextureLoader } from 'angular-three-soba/loaders'
 import { MeshPhysicalMaterial, MeshStandardMaterial, RepeatWrapping, SRGBColorSpace, type Mesh } from 'three'
-
-extend({})
 
 @Component({
 	selector: 'app-floor',
@@ -16,8 +14,8 @@ extend({})
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Floor {
-	protected gltf = injectNgtsGLTFLoader(() => 'models/floorModel.glb')
-	protected textures = injectNgtsTextureLoader(() => ({
+	private gltf = injectNgtsGLTFLoader(() => 'models/floorModel.glb')
+	private textures = injectNgtsTextureLoader(() => ({
 		diffuse: 'textures/hardwood_diffuse.jpg',
 		bump: 'textures/hardwood_bump.jpg',
 		roughness: 'textures/hardwood_roughness.jpg',
@@ -39,7 +37,7 @@ export class Floor {
 		})
 
 		scene.position.z = -0
-		scene.scale.set(3, 3, 3)
+		scene.scale.setScalar(3)
 
 		scene.traverse((obj) => {
 			if ((obj as Mesh).isMesh) {

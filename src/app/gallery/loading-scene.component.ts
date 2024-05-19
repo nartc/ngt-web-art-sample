@@ -11,11 +11,16 @@ extend({ Mesh, SphereGeometry, PointLight })
 @Component({
 	standalone: true,
 	template: `
+		<!-- addLights -->
 		<app-lights />
+
+		<!-- addControls -->
 		<app-controls [controlsRef]="controlsRef" />
 
+		<!-- angular logo model -->
 		<ngt-primitive *args="[model()]" [position]="[0, 13, -100]" (beforeRender)="onBeforeRender($any($event).object)" />
 
+		<!-- particle light -->
 		<ngt-mesh [position]="[0, 0, -90]" (beforeRender)="onParticleLightBeforeRender($any($event).object)">
 			<ngt-sphere-geometry *args="[0.05, 8, 8]" />
 			<ngt-point-light [intensity]="30" [rotation]="[-Math.PI / 2, 0, 0]" />
@@ -29,7 +34,8 @@ export class LoadingScene {
 	protected Math = Math
 
 	protected controlsRef = injectNgtRef<OrbitControls>()
-	protected gltf = injectNgtsGLTFLoader(() => 'models/aLogo.glb')
+
+	private gltf = injectNgtsGLTFLoader(() => 'models/aLogo.glb')
 	protected model = computed(() => {
 		const gltf = this.gltf()
 		if (!gltf) return null
@@ -37,11 +43,11 @@ export class LoadingScene {
 		return gltf.scene
 	})
 
-	protected onBeforeRender(object: Object3D) {
+	onBeforeRender(object: Object3D) {
 		object.rotation.y += 0.01
 	}
 
-	protected onParticleLightBeforeRender(object: Mesh) {
+	onParticleLightBeforeRender(object: Mesh) {
 		const timer = Date.now() * 0.00025
 		object.position.x = Math.sin(timer * 7) * 3
 		object.position.y = Math.cos(timer * 5) * 4

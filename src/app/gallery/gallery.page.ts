@@ -8,7 +8,7 @@ import { MuseumCanvas } from './museum-canvas.component'
 	template: `
 		@defer (prefetch on idle) {
 			<app-museum-canvas [scene]="galleryScene" />
-		} @placeholder (minimum 50s) {
+		} @placeholder (minimum 5s) {
 			<app-museum-canvas [scene]="loadingScene" />
 		}
 	`,

@@ -13,14 +13,13 @@ import { injectNgtsGLTFLoader } from 'angular-three-soba/loaders'
 	imports: [NgtArgs],
 })
 export class Walls {
-	protected gltf = injectNgtsGLTFLoader(() => 'models/galleryInnerWalls.glb')
+	private gltf = injectNgtsGLTFLoader(() => 'models/galleryInnerWalls.glb')
 	protected model = computed(() => {
 		const gltf = this.gltf()
 		if (!gltf) return null
 
 		const scene = gltf.scene
 
-		scene.position.set(0, 0, 0)
 		scene.scale.setScalar(3)
 
 		return scene

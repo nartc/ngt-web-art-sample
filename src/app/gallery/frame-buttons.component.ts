@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
 import { extend, injectBeforeRender, NgtArgs, type NgtThreeEvent } from 'angular-three'
 import { Color } from 'three'
 import { Block, Text, update } from 'three-mesh-ui'
@@ -6,46 +6,32 @@ import type { Artwork } from '../artworks'
 
 extend({ MeshBlock: Block, MeshText: Text })
 
+const DEFAULT_BUTTON_OPTIONS = {
+	width: 0.4,
+	height: 0.15,
+	justifyContent: 'center',
+	offset: 0.05,
+	margin: 0.02,
+	borderRadius: 0.075,
+}
+
 @Component({
 	selector: 'app-frame-buttons',
 	standalone: true,
 	template: `
 		<ngt-mesh-block
-			*args="[
-				{
-					name: 'Button Panel Container',
-					justifyContent: 'center',
-					contentDirection: 'row-reverse',
-					fontFamily: FontJSON,
-					fontTexture: FontImage,
-					fontSize: 0.1,
-					padding: 0.02,
-					borderRadius: 0.11,
-					height: 0.2,
-					width: buttons.length / 2
-				}
-			]"
+			*args="[buttonsPanelArgs]"
 			[position]="[0, -0.7, -0.2]"
-			(afterAttach)="onAfterAttach($any($event).node)"
+			(afterAttach)="onButtonPanelAttached($any($event).node)"
 		>
-			@for (button of buttons; track button.name) {
+			@for (button of buttons; track $index) {
 				<ngt-mesh-block
-					*args="[
-						{
-							name: 'Frame ' + artwork().id + ' ' + button.name,
-							width: 0.4,
-							height: 0.15,
-							justifyContent: 'center',
-							offset: 0.05,
-							margin: 0.02,
-							borderRadius: 0.075
-						}
-					]"
+					*args="[button.args()]"
 					[position]="button.position"
 					(click)="button.onClick($any($event))"
-					(afterAttach)="onAfterButtonAttach($any($event).node)"
+					(afterAttach)="onButtonAttached($any($event).node)"
 				>
-					<ngt-mesh-text *args="[{ content: button.text, name: button.name + ' Text' }]" />
+					<ngt-mesh-text *args="[button.textArgs()]" />
 				</ngt-mesh-block>
 			}
 		</ngt-mesh-block>
@@ -57,46 +43,74 @@ extend({ MeshBlock: Block, MeshText: Text })
 export class FrameButtons {
 	protected Math = Math
 
-	protected FontJSON = 'fonts/Roboto-msdf.json'
-	protected FontImage = 'fonts/Roboto-msdf.png'
+	artwork = input.required<Artwork>()
+	next = output()
+	previous = output()
+	playInfo = output()
 
 	protected buttons = [
 		{
-			name: 'Next Button',
-			text: 'Next',
 			onClick: (event: NgtThreeEvent<any>) => {
 				if (event.object.name === 'MeshUI-Frame') {
 					this.next.emit()
 				}
 			},
+			args: computed(() => ({
+				...DEFAULT_BUTTON_OPTIONS,
+				name: 'Frame ' + this.artwork().id + ' ' + 'Next Button',
+			})),
+			textArgs: computed(() => ({
+				content: 'Next',
+				name: 'Frame ' + this.artwork().id + ' ' + 'Next Button Text',
+			})),
 			position: [-0.75, 0, 0.0],
 		},
 		{
-			name: 'Info Button',
-			text: 'Info',
 			onClick: (event: NgtThreeEvent<any>) => {
 				if (event.object.name === 'MeshUI-Frame') {
 					this.playInfo.emit()
 				}
 			},
+			args: computed(() => ({
+				...DEFAULT_BUTTON_OPTIONS,
+				name: 'Frame ' + this.artwork().id + ' ' + 'Info Button',
+			})),
+			textArgs: computed(() => ({
+				content: 'Info',
+				name: 'Frame ' + this.artwork().id + ' ' + 'Info Button Text',
+			})),
 			position: [-0.8, 0.8, -0.1],
 		},
 		{
-			name: 'Previous Button',
-			text: 'Previous',
 			onClick: (event: NgtThreeEvent<any>) => {
 				if (event.object.name === 'MeshUI-Frame') {
 					this.previous.emit()
 				}
 			},
+			args: computed(() => ({
+				...DEFAULT_BUTTON_OPTIONS,
+				name: 'Frame ' + this.artwork().id + ' ' + 'Previous Button',
+			})),
+			textArgs: computed(() => ({
+				content: 'Previous',
+				name: 'Frame ' + this.artwork().id + ' ' + 'Previous Button Text',
+			})),
 			position: [0.75, 0, 0],
 		},
 	]
 
-	artwork = input.required<Artwork>()
-	next = output()
-	previous = output()
-	playInfo = output()
+	protected buttonsPanelArgs = {
+		name: 'Button Panel Container',
+		justifyContent: 'center',
+		contentDirection: 'row-reverse',
+		fontFamily: 'fonts/Roboto-msdf.json',
+		fontTexture: 'fonts/Roboto-msdf.png',
+		fontSize: 0.1,
+		padding: 0.02,
+		borderRadius: 0.11,
+		height: 0.2,
+		width: this.buttons.length / 2,
+	}
 
 	constructor() {
 		injectBeforeRender(() => {
@@ -104,12 +118,12 @@ export class FrameButtons {
 		})
 	}
 
-	protected onAfterAttach(panel: Block) {
+	onButtonPanelAttached(panel: Block) {
 		panel.rotateY(Math.PI)
 		panel.rotateX(-0.55)
 	}
 
-	protected onAfterButtonAttach(button: Block) {
+	onButtonAttached(button: Block) {
 		// @ts-expect-error - we are setting up the state
 		button.setupState({
 			state: 'idle',

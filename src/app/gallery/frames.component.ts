@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA, inject, input } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	CUSTOM_ELEMENTS_SCHEMA,
+	inject,
+	input,
+	signal,
+} from '@angular/core'
 import { checkUpdate, extend, injectNgtRef, NgtArgs } from 'angular-three'
 import { animate, easeInOut } from 'popmotion'
 import { CylinderGeometry, Group, MathUtils, Object3D, Vector3 } from 'three'
@@ -13,12 +21,7 @@ extend({ Group, CylinderGeometry })
 	standalone: true,
 	template: `
 		<ngt-cylinder-geometry [ref]="geometryRef" *args="[1, 0.85, 0.1, 64, 5]" attach="none" />
-		<ngt-group
-			[ref]="framesRef"
-			name="Frames Group"
-			[position]="[0, 1.6, 0]"
-			(afterAttach)="onAfterAttach($any($event).node)"
-		>
+		<ngt-group name="Frames Group" [position]="[0, 1.6, 0]" (afterAttach)="onFramesGroupAttached($any($event).node)">
 			@for (artwork of artworks(); track artwork.id) {
 				<app-frame
 					[artwork]="artwork"
@@ -37,41 +40,42 @@ extend({ Group, CylinderGeometry })
 })
 export class Frames {
 	artworks = input.required<Artwork[]>()
-	protected angle = computed(() => (Math.PI * 2) / this.artworks().length || 5)
 
 	protected geometryRef = injectNgtRef<CylinderGeometry>()
-	protected framesRef = injectNgtRef<Group>()
 
 	private speechClient = inject(SpeechClient)
 
-	protected onNext(currentId: number) {
-		const currentFrame = this.framesRef.nativeElement.children[currentId]
+	private frames = signal<Group>(null!)
+	private angle = computed(() => (Math.PI * 2) / this.artworks().length || 5)
+
+	onNext(currentId: number) {
+		const currentFrame = this.frames().children[currentId]
 		this.resetFramePosition(currentFrame)
 
 		// Rotate to Next frame
 		const i = currentId < 5 - 1 ? currentId + 1 : 0
 		this.rotateFrames(72)
-		this.focusFrame(this.framesRef.nativeElement.children[i])
+		this.focusFrame(this.frames().children[i])
 	}
 
-	protected onPrevious(currentId: number) {
-		const currentFrame = this.framesRef.nativeElement.children[currentId]
+	onPrevious(currentId: number) {
+		const currentFrame = this.frames().children[currentId]
 		this.resetFramePosition(currentFrame)
 
 		// Rotate to Previous
 		const i = currentId === 0 ? 5 - 1 : currentId - 1
 		this.rotateFrames(-72)
-		this.focusFrame(this.framesRef.nativeElement.children[i])
+		this.focusFrame(this.frames().children[i])
 	}
 
-	protected onPlayInfo(artwork: Artwork) {
+	onPlayInfo(artwork: Artwork) {
 		const text = artwork.description || artwork.title
 		if (text) {
 			void this.speechClient.speak(text)
 		}
 	}
 
-	protected onFrameAttached(frame: Group, index: number) {
+	onFrameAttached(frame: Group, index: number) {
 		frame.rotateY(Math.PI)
 		const alpha = index * this.angle()
 		const x = Math.sin(alpha) * 7 // 0 - 1
@@ -82,7 +86,8 @@ export class Frames {
 		checkUpdate(frame)
 	}
 
-	protected onAfterAttach(frames: Group) {
+	onFramesGroupAttached(frames: Group) {
+		this.frames.set(frames)
 		// NOTE: we want to run this after all frames are attached
 		queueMicrotask(() => {
 			const f = frames.children[0]
@@ -90,14 +95,14 @@ export class Frames {
 		})
 	}
 
-	protected focusFrame(frame: Object3D) {
+	private focusFrame(frame: Object3D) {
 		const x = (frame.position.x / 7) * 4
 		const z = (frame.position.z / 7) * 4
 		const p = new Vector3(x, frame.position.y, z)
 		this.moveFrame(frame, p)
 	}
 
-	protected moveFrame(frame: Object3D, position: Vector3) {
+	private moveFrame(frame: Object3D, position: Vector3) {
 		animate({
 			from: frame.position,
 			to: position,
@@ -114,20 +119,20 @@ export class Frames {
 		})
 	}
 
-	protected resetFramePosition(frame: Object3D) {
+	private resetFramePosition(frame: Object3D) {
 		const position = frame.userData['originalPosition']
 		this.moveFrame(frame, position)
 	}
 
-	protected rotateFrames(angle: number = 72) {
+	private rotateFrames(angle: number = 72) {
 		// angle between frames and the current group rotation
-		const y = MathUtils.degToRad(angle) + this.framesRef.nativeElement.rotation.y
+		const y = MathUtils.degToRad(angle) + this.frames().rotation.y
 		animate({
-			from: this.framesRef.nativeElement.rotation.y,
+			from: this.frames().rotation.y,
 			to: y,
 			duration: 1000,
 			ease: easeInOut,
-			onUpdate: (latest) => (this.framesRef.nativeElement.rotation.y = latest),
+			onUpdate: (latest) => (this.frames().rotation.y = latest),
 		})
 	}
 }
