@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA, inject, input } from '@angular/core'
 import { checkUpdate, extend, injectNgtRef, NgtArgs } from 'angular-three'
 import { animate, easeInOut } from 'popmotion'
 import { CylinderGeometry, Group, MathUtils, Object3D, Vector3 } from 'three'
 import type { Artwork } from '../services/artwork.store'
+import { SpeechClient } from '../services/speech.client'
 import { Frame } from './frame.component'
 
 extend({ Group, CylinderGeometry })
@@ -25,6 +26,7 @@ extend({ Group, CylinderGeometry })
 					(frameAttached)="onFrameAttached($event, $index)"
 					(next)="onNext($event)"
 					(previous)="onPrevious($event)"
+					(playInfo)="onPlayInfo($event)"
 				/>
 			}
 		</ngt-group>
@@ -39,6 +41,8 @@ export class Frames {
 
 	protected geometryRef = injectNgtRef<CylinderGeometry>()
 	protected framesRef = injectNgtRef<Group>()
+
+	private speechClient = inject(SpeechClient)
 
 	protected onNext(currentId: number) {
 		const currentFrame = this.framesRef.nativeElement.children[currentId]
@@ -58,6 +62,13 @@ export class Frames {
 		const i = currentId === 0 ? 5 - 1 : currentId - 1
 		this.rotateFrames(-72)
 		this.focusFrame(this.framesRef.nativeElement.children[i])
+	}
+
+	protected onPlayInfo(artwork: Artwork) {
+		const text = artwork.description || artwork.title
+		if (text) {
+			void this.speechClient.speak(text)
+		}
 	}
 
 	protected onFrameAttached(frame: Group, index: number) {
