@@ -7,25 +7,24 @@ import {
 	input,
 	signal,
 } from '@angular/core'
-import { checkUpdate, extend, injectNgtRef, NgtArgs } from 'angular-three'
+import { checkUpdate, extend, NgtArgs } from 'angular-three'
 import { animate, easeInOut } from 'popmotion'
 import { CylinderGeometry, Group, MathUtils, Object3D, Vector3 } from 'three'
 import type { Artwork } from '../artworks'
 import { SpeechClient } from '../speech.client'
 import { Frame } from './frame.component'
 
-extend({ Group, CylinderGeometry })
+extend({ Group })
 
 @Component({
 	selector: 'app-frames',
 	standalone: true,
 	template: `
-		<ngt-cylinder-geometry [ref]="geometryRef" *args="[1, 0.85, 0.1, 64, 5]" attach="none" />
 		<ngt-group name="Frames Group" [position]="[0, 1.6, 0]" (afterAttach)="onFramesGroupAttached($any($event).node)">
 			@for (artwork of artworks(); track artwork.id) {
 				<app-frame
 					[artwork]="artwork"
-					[geometryRef]="geometryRef"
+					[geometry]="geometry"
 					(frameAttached)="onFrameAttached($event, $index)"
 					(next)="onNext($event)"
 					(previous)="onPrevious($event)"
@@ -41,7 +40,7 @@ extend({ Group, CylinderGeometry })
 export class Frames {
 	artworks = input.required<Artwork[]>()
 
-	protected geometryRef = injectNgtRef<CylinderGeometry>()
+	protected geometry = new CylinderGeometry(1, 0.85, 0.1, 64, 5)
 
 	private speechClient = inject(SpeechClient)
 

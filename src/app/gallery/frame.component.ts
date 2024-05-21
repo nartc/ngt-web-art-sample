@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
-import { checkUpdate, extend, NgtArgs, type NgtInjectedRef } from 'angular-three'
+import { checkUpdate, extend, NgtArgs } from 'angular-three'
 import { injectNgtsTextureLoader } from 'angular-three-soba/loaders'
 import {
 	BoxGeometry,
@@ -33,7 +33,7 @@ extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 			<ngt-mesh
 				#frameMesh
 				[name]="artwork().title + ' frame mesh'"
-				[geometry]="geometryRef().nativeElement"
+				[geometry]="geometry()"
 				(afterAttach)="onAfterAttach($any(frameMesh))"
 			>
 				<ngt-mesh-phong-material color="rgb(165, 187, 206)" [needsUpdate]="true" />
@@ -68,7 +68,7 @@ extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 export class Frame {
 	protected Math = Math
 
-	geometryRef = input.required<NgtInjectedRef<CylinderGeometry>>()
+	geometry = input.required<CylinderGeometry>()
 	artwork = input.required<Artwork>()
 
 	frameAttached = output<Group>()

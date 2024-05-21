@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
-import { extend, injectBeforeRender, NgtArgs, type NgtThreeEvent } from 'angular-three'
+import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
+import { extend, injectBeforeRender, NgtArgs } from 'angular-three'
 import { Color } from 'three'
 import { Block, Text, update } from 'three-mesh-ui'
 import type { Artwork } from '../artworks'
@@ -15,23 +15,46 @@ const DEFAULT_BUTTON_OPTIONS = {
 	borderRadius: 0.075,
 }
 
+const idleAttributes = {
+	width: 0.4,
+	height: 0.15,
+	offset: 0.035,
+	backgroundColor: new Color(0x666666),
+	backgroundOpacity: 0.3,
+	fontColor: new Color(0xffffff),
+}
+
+const hoveredAttributes = {
+	width: 0.4,
+	height: 0.15,
+	offset: 0.035,
+	backgroundColor: new Color(0x999999),
+	backgroundOpacity: 1,
+	fontColor: new Color(0xffffff),
+}
+
+const selectedAttributes = {
+	offset: 0.02,
+	backgroundColor: new Color(0x777777),
+	fontColor: new Color(0x222222),
+}
+
 @Component({
 	selector: 'app-frame-buttons',
 	standalone: true,
 	template: `
-		<ngt-mesh-block
-			*args="[buttonsPanelArgs]"
-			[position]="[0, -0.7, -0.2]"
-			(afterAttach)="onButtonPanelAttached($any($event).node)"
-		>
+		<ngt-mesh-block *args="[buttonsPanelArgs]" [position]="[0, -0.7, -0.2]" [rotation]="[0.55, Math.PI, 0]">
 			@for (button of buttons; track $index) {
 				<ngt-mesh-block
-					*args="[button.args()]"
+					*args="[buttonOptions]"
+					[name]="'Frame ' + artwork().id + ' ' + button.text + ' Button'"
 					[position]="button.position"
-					(click)="button.onClick($any($event))"
+					(click)="$any($event).object.name === 'MeshUI-Frame' && button.onClick()"
 					(afterAttach)="onButtonAttached($any($event).node)"
 				>
-					<ngt-mesh-text *args="[button.textArgs()]" />
+					<ngt-mesh-text
+						*args="[{ content: button.text, name: 'Frame ' + artwork().id + ' ' + button.text + ' Button Text' }]"
+					/>
 				</ngt-mesh-block>
 			}
 		</ngt-mesh-block>
@@ -48,57 +71,24 @@ export class FrameButtons {
 	previous = output()
 	playInfo = output()
 
+	protected buttonOptions = DEFAULT_BUTTON_OPTIONS
 	protected buttons = [
 		{
-			onClick: (event: NgtThreeEvent<any>) => {
-				if (event.object.name === 'MeshUI-Frame') {
-					this.next.emit()
-				}
-			},
-			args: computed(() => ({
-				...DEFAULT_BUTTON_OPTIONS,
-				name: 'Frame ' + this.artwork().id + ' ' + 'Next Button',
-			})),
-			textArgs: computed(() => ({
-				content: 'Next',
-				name: 'Frame ' + this.artwork().id + ' ' + 'Next Button Text',
-			})),
+			onClick: this.next.emit.bind(this.next),
+			text: 'Next',
 			position: [-0.75, 0, 0.0],
 		},
 		{
-			onClick: (event: NgtThreeEvent<any>) => {
-				if (event.object.name === 'MeshUI-Frame') {
-					this.playInfo.emit()
-				}
-			},
-			args: computed(() => ({
-				...DEFAULT_BUTTON_OPTIONS,
-				name: 'Frame ' + this.artwork().id + ' ' + 'Info Button',
-			})),
-			textArgs: computed(() => ({
-				content: 'Info',
-				name: 'Frame ' + this.artwork().id + ' ' + 'Info Button Text',
-			})),
+			onClick: this.playInfo.emit.bind(this.playInfo),
+			text: 'Info',
 			position: [-0.8, 0.8, -0.1],
 		},
 		{
-			onClick: (event: NgtThreeEvent<any>) => {
-				if (event.object.name === 'MeshUI-Frame') {
-					this.previous.emit()
-				}
-			},
-			args: computed(() => ({
-				...DEFAULT_BUTTON_OPTIONS,
-				name: 'Frame ' + this.artwork().id + ' ' + 'Previous Button',
-			})),
-			textArgs: computed(() => ({
-				content: 'Previous',
-				name: 'Frame ' + this.artwork().id + ' ' + 'Previous Button Text',
-			})),
+			onClick: this.previous.emit.bind(this.previous),
+			text: 'Previous',
 			position: [0.75, 0, 0],
 		},
 	]
-
 	protected buttonsPanelArgs = {
 		name: 'Button Panel Container',
 		justifyContent: 'center',
@@ -118,46 +108,14 @@ export class FrameButtons {
 		})
 	}
 
-	onButtonPanelAttached(panel: Block) {
-		panel.rotateY(Math.PI)
-		panel.rotateX(-0.55)
-	}
-
 	onButtonAttached(button: Block) {
 		// @ts-expect-error - we are setting up the state
-		button.setupState({
-			state: 'idle',
-			attributes: {
-				width: 0.4,
-				height: 0.15,
-				offset: 0.035,
-				backgroundColor: new Color(0x666666),
-				backgroundOpacity: 0.3,
-				fontColor: new Color(0xffffff),
-			},
-		})
+		button.setupState({ state: 'idle', attributes: idleAttributes })
 
 		// @ts-expect-error - we are setting up the state
-		button.setupState({
-			state: 'hovered',
-			attributes: {
-				width: 0.4,
-				height: 0.15,
-				offset: 0.035,
-				backgroundColor: new Color(0x999999),
-				backgroundOpacity: 1,
-				fontColor: new Color(0xffffff),
-			},
-		})
+		button.setupState({ state: 'hovered', attributes: hoveredAttributes })
 
 		// @ts-expect-error - we are setting up the state
-		button.setupState({
-			state: 'selected',
-			attributes: {
-				offset: 0.02,
-				backgroundColor: new Color(0x777777),
-				fontColor: new Color(0x222222),
-			},
-		})
+		button.setupState({ state: 'selected', attributes: selectedAttributes })
 	}
 }
