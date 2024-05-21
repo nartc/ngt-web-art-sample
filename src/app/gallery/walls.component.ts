@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core'
 import { NgtArgs } from 'angular-three'
 import { injectNgtsGLTFLoader } from 'angular-three-soba/loaders'
 
@@ -6,7 +11,12 @@ import { injectNgtsGLTFLoader } from 'angular-three-soba/loaders'
 	selector: 'app-walls',
 	standalone: true,
 	template: `
-		<ngt-primitive *args="[model()]" [scale]="3" [rotation]="[0, (Math.PI / 3) * 2, 0]" [position]="[-1.5, 0, 0]" />
+		<ngt-primitive
+			*args="[model()]"
+			[scale]="3"
+			[rotation]="[0, (Math.PI / 3) * 2, 0]"
+			[position]="[-1.5, 0, 0]"
+		/>
 	`,
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	changeDetection: ChangeDetectionStrategy.OnPush,

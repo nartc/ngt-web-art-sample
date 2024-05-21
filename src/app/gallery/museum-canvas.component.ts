@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, input, type Type } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	input,
+	type Type,
+} from '@angular/core'
 import { NgtCanvas } from 'angular-three'
 import { NgtsLoader } from 'angular-three-soba/loaders'
 import * as THREE from 'three'

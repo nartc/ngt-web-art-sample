@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	input,
+	output,
+} from '@angular/core'
 import { extend, injectBeforeRender, NgtArgs } from 'angular-three'
 import { Color } from 'three'
 import { Block, Text, update } from 'three-mesh-ui'
@@ -43,17 +49,29 @@ const selectedAttributes = {
 	selector: 'app-frame-buttons',
 	standalone: true,
 	template: `
-		<ngt-mesh-block *args="[buttonsPanelArgs]" [position]="[0, -0.7, -0.2]" [rotation]="[0.55, Math.PI, 0]">
+		<ngt-mesh-block
+			*args="[buttonsPanelArgs]"
+			[position]="[0, -0.7, -0.2]"
+			[rotation]="[0.55, Math.PI, 0]"
+		>
 			@for (button of buttons; track $index) {
 				<ngt-mesh-block
 					*args="[buttonOptions]"
 					[name]="'Frame ' + artwork().id + ' ' + button.text + ' Button'"
 					[position]="button.position"
-					(click)="$any($event).object.name === 'MeshUI-Frame' && button.onClick()"
+					(click)="
+						$any($event).object.name === 'MeshUI-Frame' && button.onClick()
+					"
 					(afterAttach)="onButtonAttached($any($event).node)"
 				>
 					<ngt-mesh-text
-						*args="[{ content: button.text, name: 'Frame ' + artwork().id + ' ' + button.text + ' Button Text' }]"
+						*args="[
+							{
+								content: button.text,
+								name:
+									'Frame ' + artwork().id + ' ' + button.text + ' Button Text'
+							}
+						]"
 					/>
 				</ngt-mesh-block>
 			}

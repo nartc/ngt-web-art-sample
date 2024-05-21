@@ -20,7 +20,11 @@ extend({ Group })
 	selector: 'app-frames',
 	standalone: true,
 	template: `
-		<ngt-group name="Frames Group" [position]="[0, 1.6, 0]" (afterAttach)="onFramesGroupAttached($any($event).node)">
+		<ngt-group
+			name="Frames Group"
+			[position]="[0, 1.6, 0]"
+			(afterAttach)="onFramesGroupAttached($any($event).node)"
+		>
 			@for (artwork of artworks(); track artwork.id) {
 				<app-frame
 					[artwork]="artwork"

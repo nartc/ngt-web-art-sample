@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, effect } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	effect,
+} from '@angular/core'
 import { extend, injectNgtStore } from 'angular-three'
 import { HemisphereLight, SpotLight } from 'three'
 
@@ -8,7 +13,11 @@ extend({ HemisphereLight })
 	selector: 'app-lights',
 	standalone: true,
 	template: `
-		<ngt-hemisphere-light skyColor="#ffffff" groundColor="#bbbbff" [intensity]="0.5" />
+		<ngt-hemisphere-light
+			skyColor="#ffffff"
+			groundColor="#bbbbff"
+			[intensity]="0.5"
+		/>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],

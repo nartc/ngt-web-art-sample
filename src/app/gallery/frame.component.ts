@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input, output } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	input,
+	output,
+} from '@angular/core'
 import { checkUpdate, extend, NgtArgs } from 'angular-three'
 import { injectNgtsTextureLoader } from 'angular-three-soba/loaders'
 import {
@@ -36,12 +42,18 @@ extend({ Group, Mesh, BoxGeometry, MeshPhongMaterial, SpotLight })
 				[geometry]="geometry()"
 				(afterAttach)="onAfterAttach($any(frameMesh))"
 			>
-				<ngt-mesh-phong-material color="rgb(165, 187, 206)" [needsUpdate]="true" />
+				<ngt-mesh-phong-material
+					color="rgb(165, 187, 206)"
+					[needsUpdate]="true"
+				/>
 			</ngt-mesh>
 
 			<ngt-mesh #canvasMesh name="Canvas">
 				<ngt-box-geometry *args="[1, 1, 0.12]" />
-				<ngt-mesh-phong-material name="Canvas material" [map]="artworkTexture()" />
+				<ngt-mesh-phong-material
+					name="Canvas material"
+					[map]="artworkTexture()"
+				/>
 			</ngt-mesh>
 
 			<ngt-spot-light

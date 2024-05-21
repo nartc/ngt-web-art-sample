@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core'
 import { extend } from 'angular-three'
 import { PointLight } from 'three'
 import { Lights } from './lights.component'
@@ -14,7 +18,12 @@ extend({ PointLight })
 
 		<!-- addCornerLights -->
 		@for (position of lightPositions; track $index) {
-			<ngt-point-light [intensity]="Math.PI" [distance]="13" [decay]="1" [position]="position" />
+			<ngt-point-light
+				[intensity]="Math.PI"
+				[distance]="13"
+				[decay]="1"
+				[position]="position"
+			/>
 		}
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

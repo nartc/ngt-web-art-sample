@@ -1,7 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core'
 import { checkUpdate, NgtArgs } from 'angular-three'
-import { injectNgtsGLTFLoader, injectNgtsTextureLoader } from 'angular-three-soba/loaders'
-import { MeshPhysicalMaterial, MeshStandardMaterial, RepeatWrapping, SRGBColorSpace, type Mesh } from 'three'
+import {
+	injectNgtsGLTFLoader,
+	injectNgtsTextureLoader,
+} from 'angular-three-soba/loaders'
+import {
+	MeshPhysicalMaterial,
+	MeshStandardMaterial,
+	RepeatWrapping,
+	SRGBColorSpace,
+	type Mesh,
+} from 'three'
 
 @Component({
 	selector: 'app-floor',
@@ -27,14 +41,15 @@ export class Floor {
 		const { diffuse, roughness, bump } = textures
 		const scene = gltf.scene
 
-		let material: MeshStandardMaterial | MeshPhysicalMaterial = new MeshPhysicalMaterial({
-			// clearcoat: 0,
-			clearcoatRoughness: 0.1,
-			// metalness: 0,
-			roughness: 0.9,
-			color: 0x54001b, // Teal: 0x004a54,
-			// normalScale: new Vector2(0.15, 0.15)
-		})
+		let material: MeshStandardMaterial | MeshPhysicalMaterial =
+			new MeshPhysicalMaterial({
+				// clearcoat: 0,
+				clearcoatRoughness: 0.1,
+				// metalness: 0,
+				roughness: 0.9,
+				color: 0x54001b, // Teal: 0x004a54,
+				// normalScale: new Vector2(0.15, 0.15)
+			})
 
 		scene.position.z = -0
 		scene.scale.setScalar(3)

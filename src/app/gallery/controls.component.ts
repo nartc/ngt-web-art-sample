@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core'
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	input,
+} from '@angular/core'
 import { injectNgtRef } from 'angular-three'
 import { NgtsOrbitControls } from 'angular-three-soba/controls'
 import { OrbitControls } from 'three-stdlib'
